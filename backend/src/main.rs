@@ -18,23 +18,31 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "backend=debug,tower_http=debug".into()),
+                .unwrap_or_else(|_| "backend=debug,tower_http=debug,sqlx=info".into()),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
 
     // Load environment variables
     dotenvy::dotenv().ok();
+    
+    let database_url = std::env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
 
     tracing::info!("Starting Spectrum Tenant POC Backend");
+    tracing::info!("Connecting to database...");
 
-    // TODO: Initialize database pool
+    // Create database pool
+    let pool = db::create_pool(&database_url).await?;
     
+    tracing::info!("Database connected successfully");
+
     // Build application routes
     let app = Router::new()
         .route("/", get(|| async { "Spectrum Tenant POC API" }))
         .route("/health", get(|| async { "OK" }))
-        .layer(CorsLayer::permissive());
+        .layer(CorsLayer::permissive())
+        .with_state(pool);
 
     // Start server
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

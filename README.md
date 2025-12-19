@@ -98,7 +98,7 @@ cd ..
 
 ```bash
 # Create PostgreSQL database
-createdb spectrum_poc
+createdb spectrum_tenant_poc
 
 # Run migrations (after Phase 2)
 cd backend
@@ -112,7 +112,7 @@ sqlx migrate run
 cp backend/.env.example backend/.env
 # Edit backend/.env with your database credentials
 
-# DATABASE_URL=postgresql://postgres:password@localhost:5432/spectrum_poc
+# DATABASE_URL=postgresql://postgres:password@localhost:5432/spectrum_tenant_poc
 ```
 
 ## Development
