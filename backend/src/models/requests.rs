@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use uuid::Uuid;
+use rust_decimal::Decimal;
 
 #[derive(Debug, Deserialize)]
 pub struct CreateClientRequest {
@@ -56,7 +57,7 @@ pub struct CreateUnitRequest {
     pub unit_type: String,
     pub square_feet: Option<i32>,
     pub bedrooms: Option<i32>,
-    pub bathrooms: Option<f32>,
+    pub bathrooms: Option<Decimal>,  // Changed from f32
 }
 
 #[derive(Debug, Deserialize)]
@@ -65,5 +66,5 @@ pub struct UpdateUnitRequest {
     pub unit_type: Option<String>,
     pub square_feet: Option<i32>,
     pub bedrooms: Option<i32>,
-    pub bathrooms: Option<f32>,
+    pub bathrooms: Option<Decimal>,  // Changed from f32
 }

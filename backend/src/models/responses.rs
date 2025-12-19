@@ -2,6 +2,7 @@ use serde::Serialize;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
+use rust_decimal::Decimal;
 
 #[derive(Debug, Serialize, FromRow)]
 pub struct ClientResponse {
@@ -48,7 +49,7 @@ pub struct UnitResponse {
     pub unit_type: String,
     pub square_feet: Option<i32>,
     pub bedrooms: Option<i32>,
-    pub bathrooms: Option<f32>,
+    pub bathrooms: Option<Decimal>,  // Changed from f32
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub version: i64,
