@@ -1,0 +1,12 @@
+{
+  "name": "spectrum-tenant-poc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && cargo run",
+    "dev:desktop": "cd desktop && cargo tauri dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:all": "cargo build --release && cd frontend && npm run build",
+    "test:all": "cargo test --all"
+  }
+}
