@@ -9,6 +9,7 @@ mod sync;
 mod commands;
 
 use commands::AppState;
+use sync::SyncService;
 
 fn main() {
     tauri::Builder::default()
@@ -18,9 +19,13 @@ fn main() {
                 db::init_db().await
             }).expect("Failed to initialize database");
             
-            // Store database in app state
+            // Initialize sync service
+            let sync = SyncService::new();
+            
+            // Store in app state
             app.manage(AppState {
                 db: Mutex::new(db),
+                sync: Mutex::new(sync),
             });
             
             Ok(())
@@ -34,6 +39,8 @@ fn main() {
             commands::delete_client,
             commands::list_properties,
             commands::create_property,
+            commands::sync_pull,
+            commands::check_server_connection,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
