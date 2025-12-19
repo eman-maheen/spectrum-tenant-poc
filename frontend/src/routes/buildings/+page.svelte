@@ -17,7 +17,7 @@
   </div>
 
   <div class="empty">
-    <p>Buildings functionality coming in Phase 5 - Sync Implementation</p>
+    <p>Buildings functionality coming soon</p>
     <p class="text-muted">This page will show all buildings across properties</p>
   </div>
 </div>

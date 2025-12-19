@@ -17,7 +17,7 @@
   </div>
 
   <div class="empty">
-    <p>Units functionality coming in Phase 5 - Sync Implementation</p>
+    <p>Units functionality coming soon</p>
     <p class="text-muted">This page will show all units across buildings</p>
   </div>
 </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   import { tauriApi } from '$lib/api/tauri';
   import { clients, isLoading } from '$lib/stores/clients';
   import type { Client } from '$lib/types';
@@ -12,10 +13,14 @@
   };
 
   onMount(async () => {
-    await loadClients();
+    if (browser) {
+      await loadClients();
+    }
   });
 
   async function loadClients() {
+    if (!browser) return;
+    
     isLoading.set(true);
     try {
       const data = await tauriApi.listClients();
@@ -29,6 +34,8 @@
   }
 
   async function handleSubmit() {
+    if (!browser) return;
+    
     try {
       await tauriApi.createClient(
         formData.name,
@@ -49,6 +56,7 @@
   }
 
   async function handleDelete(id: string) {
+    if (!browser) return;
     if (!confirm('Are you sure you want to delete this client?')) return;
     
     try {
@@ -142,7 +150,7 @@
           </div>
 
           <div class="card-actions">
-            <button class="btn-secondary" on:click={() => alert('Edit coming in Phase 5')}>
+            <button class="btn-secondary" on:click={() => alert('Edit coming soon')}>
               Edit
             </button>
             <button class="btn-danger" on:click={() => handleDelete(client.id)}>
@@ -156,177 +164,33 @@
 </div>
 
 <style>
-  .page {
-    max-width: 1400px;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  .header h1 {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 600;
-  }
-
-  .btn-primary {
-    background: #3b82f6;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .btn-primary:hover {
-    background: #2563eb;
-  }
-
-  .btn-secondary {
-    background: #6b7280;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .btn-secondary:hover {
-    background: #4b5563;
-  }
-
-  .btn-danger {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .btn-danger:hover {
-    background: #dc2626;
-  }
-
-  .card {
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-  }
-
-  .form-card {
-    margin-bottom: 2rem;
-  }
-
-  .form-card h2 {
-    margin: 0 0 1.5rem 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-  }
-
-  .form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-
-  .form-group input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  .form-actions {
-    margin-top: 1.5rem;
-  }
-
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .client-card .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-
-  .client-card h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  .badge-success {
-    background: #d1fae5;
-    color: #065f46;
-  }
-
-  .badge-warning {
-    background: #fef3c7;
-    color: #92400e;
-  }
-
-  .card-body p {
-    margin: 0.5rem 0;
-    color: #374151;
-  }
-
-  .text-muted {
-    color: #6b7280 !important;
-    font-size: 0.875rem;
-  }
-
-  .card-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-  }
-
-  .loading,
-  .empty {
-    text-align: center;
-    padding: 3rem;
-    color: #6b7280;
-  }
-
-  .empty p {
-    font-size: 1.125rem;
-  }
+  /* Keep all the existing styles from before */
+  .page { max-width: 1400px; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+  .header h1 { margin: 0; font-size: 2rem; font-weight: 600; }
+  .btn-primary { background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-secondary { background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 0.875rem; cursor: pointer; transition: background 0.2s; }
+  .btn-secondary:hover { background: #4b5563; }
+  .btn-danger { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 0.875rem; cursor: pointer; transition: background 0.2s; }
+  .btn-danger:hover { background: #dc2626; }
+  .card { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 1.5rem; }
+  .form-card { margin-bottom: 2rem; }
+  .form-card h2 { margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; }
+  .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; box-sizing: border-box; }
+  .form-group input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+  .form-actions { margin-top: 1.5rem; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+  .client-card .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .client-card h3 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+  .badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-success { background: #d1fae5; color: #065f46; }
+  .badge-warning { background: #fef3c7; color: #92400e; }
+  .card-body p { margin: 0.5rem 0; color: #374151; }
+  .text-muted { color: #6b7280 !important; font-size: 0.875rem; }
+  .card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; }
+  .loading, .empty { text-align: center; padding: 3rem; color: #6b7280; }
+  .empty p { font-size: 1.125rem; }
 </style>

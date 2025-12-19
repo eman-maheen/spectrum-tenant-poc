@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tauriApi } from '$lib/api/tauri';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
+  import { browser } from '$app/environment';
 
   const dispatch = createEventDispatcher();
 
@@ -9,11 +10,17 @@
   let lastSyncTime: Date | null = null;
 
   async function checkConnection() {
-    isOnline = await tauriApi.checkConnection();
+    if (!browser) return;
+    try {
+      isOnline = await tauriApi.checkConnection();
+    } catch (error) {
+      console.error('Failed to check connection:', error);
+      isOnline = false;
+    }
   }
 
   async function handleSync() {
-    if (isSyncing) return;
+    if (isSyncing || !browser) return;
 
     isSyncing = true;
     try {
@@ -29,11 +36,15 @@
     }
   }
 
-  // Check connection on mount
-  checkConnection();
-  
-  // Check connection every 30 seconds
-  setInterval(checkConnection, 30000);
+  // Check connection on mount (only in browser)
+  onMount(() => {
+    checkConnection();
+    
+    // Check connection every 30 seconds
+    const interval = setInterval(checkConnection, 30000);
+    
+    return () => clearInterval(interval);
+  });
 </script>
 
 <div class="sync-controls">
