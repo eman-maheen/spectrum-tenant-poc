@@ -1,7 +1,8 @@
 // Prevents additional console window on Windows in release
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
+use tokio::sync::Mutex as TokioMutex;
 use tauri::Manager;
 
 mod db;
@@ -25,7 +26,7 @@ fn main() {
             // Store in app state
             app.manage(AppState {
                 db: Mutex::new(db),
-                sync: Mutex::new(sync),
+                sync: Arc::new(TokioMutex::new(sync)),
             });
             
             Ok(())

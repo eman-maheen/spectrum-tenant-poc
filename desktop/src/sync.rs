@@ -1,10 +1,8 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 const API_BASE_URL: &str = "http://localhost:3000/api";
-const TENANT_ID: &str = "00000000-0000-0000-0000-000000000001"; // Demo tenant
+const TENANT_ID: &str = "00000000-0000-0000-0000-000000000001";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SyncConfig {
@@ -34,7 +32,6 @@ impl SyncService {
         }
     }
 
-    // Pull clients from server
     pub async fn pull_clients(&self) -> Result<Vec<serde_json::Value>> {
         let url = format!("{}/clients", self.config.api_url);
         
@@ -50,7 +47,6 @@ impl SyncService {
 
         let body: serde_json::Value = response.json().await?;
         
-        // Extract data from ApiResponse wrapper
         if let Some(data) = body.get("data") {
             if let Some(clients) = data.as_array() {
                 return Ok(clients.clone());
@@ -60,7 +56,6 @@ impl SyncService {
         Ok(vec![])
     }
 
-    // Pull properties from server
     pub async fn pull_properties(&self) -> Result<Vec<serde_json::Value>> {
         let url = format!("{}/properties", self.config.api_url);
         
@@ -85,7 +80,6 @@ impl SyncService {
         Ok(vec![])
     }
 
-    // Push client to server
     pub async fn push_client(
         &self,
         name: &str,
@@ -121,7 +115,6 @@ impl SyncService {
         anyhow::bail!("No data in response")
     }
 
-    // Push property to server
     pub async fn push_property(
         &self,
         client_id: &str,
@@ -163,7 +156,6 @@ impl SyncService {
         anyhow::bail!("No data in response")
     }
 
-    // Delete client on server
     pub async fn delete_client(&self, id: &str) -> Result<()> {
         let url = format!("{}/clients/{}", self.config.api_url, id);
         
@@ -180,7 +172,6 @@ impl SyncService {
         Ok(())
     }
 
-    // Check if server is reachable
     pub async fn check_connection(&self) -> bool {
         let url = "http://localhost:3000/health";
         
