@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import SyncButton from '$lib/components/SyncButton.svelte';
   
   const navItems = [
     { href: '/', label: 'Dashboard' },
@@ -8,6 +9,11 @@
     { href: '/buildings', label: 'Buildings' },
     { href: '/units', label: 'Units' },
   ];
+
+  function handleSynced() {
+    // Reload current page data
+    window.location.reload();
+  }
 </script>
 
 <div class="app">
@@ -30,9 +36,8 @@
       {/each}
     </ul>
     
-    <div class="sync-status">
-      <div class="status-indicator synced"></div>
-      <span>All synced</span>
+    <div class="sidebar-footer">
+      <SyncButton on:synced={handleSynced} />
     </div>
   </nav>
   
@@ -64,7 +69,7 @@
 
   .logo {
     padding: 2rem 1.5rem;
-    border-bottom: 1px solid #333;
+    border-top: 1px solid #333;
   }
 
   .logo h1 {
@@ -104,23 +109,9 @@
     color: white;
   }
 
-  .sync-status {
-    padding: 1rem 1.5rem;
+  .sidebar-footer {
+    padding: 1rem;
     border-top: 1px solid #333;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-  }
-
-  .status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  .status-indicator.synced {
-    background: #10b981;
   }
 
   .content {

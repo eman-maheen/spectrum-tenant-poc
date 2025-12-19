@@ -52,5 +52,14 @@ export const tauriApi = {
       stateVal: state,
       zipCode
     });
+  },
+
+  // Sync operations
+  async syncPull(): Promise<string> {
+    return await invoke<string>('sync_pull');
+  },
+
+  async checkConnection(): Promise<boolean> {
+    return await invoke<boolean>('check_server_connection');
   }
 };
