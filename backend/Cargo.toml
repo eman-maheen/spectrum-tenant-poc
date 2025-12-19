@@ -18,7 +18,8 @@ thiserror = { workspace = true }
 axum = { version = "0.7", features = ["macros"] }
 tower = "0.4"
 tower-http = { version = "0.5", features = ["fs", "cors", "trace"] }
-sqlx = { version = "0.7", features = ["postgres", "runtime-tokio", "chrono", "uuid", "json"] }
+# Use SQLx 0.8 with ONLY postgres
+sqlx = { version = "0.8", features = ["postgres", "runtime-tokio", "chrono", "uuid", "json"], default-features = false }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenvy = "0.15"
