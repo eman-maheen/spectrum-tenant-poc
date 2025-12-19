@@ -1,8 +1,9 @@
 use serde::Serialize;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct ClientResponse {
     pub id: Uuid,
     pub name: String,
@@ -13,7 +14,7 @@ pub struct ClientResponse {
     pub version: i64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct PropertyResponse {
     pub id: Uuid,
     pub client_id: Uuid,
@@ -27,7 +28,7 @@ pub struct PropertyResponse {
     pub version: i64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct BuildingResponse {
     pub id: Uuid,
     pub property_id: Uuid,
@@ -39,7 +40,7 @@ pub struct BuildingResponse {
     pub version: i64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct UnitResponse {
     pub id: Uuid,
     pub building_id: Uuid,
