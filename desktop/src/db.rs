@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use uuid::Uuid;
 
 pub struct Database {
-    conn: Connection,
+    pub conn: Connection,  // Changed to pub
 }
 
 impl Database {
@@ -19,10 +19,6 @@ impl Database {
         let schema = include_str!("../schema.sql");
         self.conn.execute_batch(schema)?;
         Ok(())
-    }
-    
-    pub fn get_connection(&self) -> &Connection {
-        &self.conn
     }
     
     // Client operations
