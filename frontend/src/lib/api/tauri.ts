@@ -1,8 +1,13 @@
+// frontend/src/lib/api/tauri.ts
+
 import { invoke } from '@tauri-apps/api/core';
 import type { Client, Property } from '$lib/types';
 
 export const tauriApi = {
-  // Client operations
+  // ========================================
+  // CLIENT OPERATIONS
+  // ========================================
+  
   async listClients(): Promise<Client[]> {
     const result = await invoke<string>('list_clients');
     return JSON.parse(result);
@@ -30,7 +35,10 @@ export const tauriApi = {
     await invoke('delete_client', { id });
   },
 
-  // Property operations
+  // ========================================
+  // PROPERTY OPERATIONS
+  // ========================================
+  
   async listProperties(): Promise<Property[]> {
     const result = await invoke<string>('list_properties');
     return JSON.parse(result);
@@ -54,12 +62,29 @@ export const tauriApi = {
     });
   },
 
-  // Sync operations
-  async syncPull(): Promise<string> {
-    return await invoke<string>('sync_pull');
+  async deleteProperty(id: string): Promise<void> {
+    await invoke('delete_property', { id });
+  },
+
+  // ========================================
+  // SYNC OPERATIONS
+  // ========================================
+  
+  /**
+   * NEW: Bidirectional sync
+   * - Pushes pending local changes to server
+   * - Pulls latest data from server
+   * - Handles conflicts (server wins)
+   */
+  async syncBidirectional(): Promise<string> {
+    return await invoke<string>('sync_bidirectional');
   },
 
   async checkConnection(): Promise<boolean> {
     return await invoke<boolean>('check_server_connection');
+  },
+
+  async getPendingCount(): Promise<number> {
+    return await invoke<number>('get_pending_count');
   }
 };
